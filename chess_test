@@ -5,11 +5,12 @@
 //  Created by Srinivas V on 15/02/20.
 //  Copyright © 2020 Srinivas V. All rights reserved.
 //
+
 #include<stdio.h>
 #include<string.h>
 #include<ctype.h>
 #include<windows.h>
-/*
+
 int board[8][8] = {-1,-2,-3,-4,-5,-3,-2,-1,
                    -6,-6,-6,-6,-6,-6,-6,-6,
                     0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
@@ -18,15 +19,7 @@ int board[8][8] = {-1,-2,-3,-4,-5,-3,-2,-1,
                     0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
                     6, 6, 6, 6, 6, 6 ,6, 6,
                     1 ,2, 3, 4, 5, 3 ,2, 1};
-*/
-int board[8][8] = {-1,0,0,0,-5,-3,-2,-1,
-                    -6,-6,-6,-6,-6,-6,-6,-6,
-                     0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
-                     0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
-                     0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
-                     0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
-                     6, 6, 6, 6, 6, 6 ,6, 6,
-                        1 ,2, 3, 4, 5, 0 ,0, 1};
+
 
 int player;
 int black_rook1_moved = 0;
@@ -119,7 +112,12 @@ int main()
             printf("White's turn\nEnter your move - ");
             scanf("%s",move);
             if (is_move(move))
-                player = 0;
+            {
+                if(player == -1)
+                    player = 1;
+                else
+                    player = 0;
+            }
             else
                 printf("Invalid move !!! \n\n");
         }
@@ -128,10 +126,14 @@ int main()
             printf("Black's turn\nEnter your move - ");
             scanf("%s",move);
             if (is_move(move))
-                player = 1;
+            {
+                if(player == -1)
+                    player = 0;
+                else
+                    player = 1;
+            }
             else
                 printf("Invalid move !!!\n\n");
-
 
         }
 
@@ -209,7 +211,11 @@ int is_move(char *point)
         }
         printf("\n %d,%d to %d,%d \n",start[0],start[1],end[0],end[1]);
         if (is_valid_move(start[0],start[1],end[0],end[1]))
+        {
+            make_move(start[0],start[1],end[0],end[1]);
             return 1;
+        }
+
     }
     return 0;
 }
@@ -225,7 +231,6 @@ int is_valid_move(int r1,int c1,int r2,int c2)
                 {
                     if (r2 == 0)
                         pawn_promotion(r1,c1);
-                    make_move(r1,c1,r2,c2);
                     return 1;
                 }
                 return 0;
@@ -235,7 +240,6 @@ int is_valid_move(int r1,int c1,int r2,int c2)
                 {
                     if (r2 == 7)
                         pawn_promotion(r1,c1);
-                    make_move(r1,c1,r2,c2);
                     return 1;
                 }
                 return 0;
@@ -248,7 +252,6 @@ int is_valid_move(int r1,int c1,int r2,int c2)
                         white_king_moved = 1;
                     else
                         black_king_moved = 1;
-                    make_move(r1,c1,r2,c2);
                     return 1;
                 }
                 return 0;
@@ -257,7 +260,6 @@ int is_valid_move(int r1,int c1,int r2,int c2)
             case -3:
                 if (camel_move(r1,c1,r2,c2))
                 {
-                    make_move(r1,c1,r2,c2);
                     return 1;
                 }
                 return 0;
@@ -266,7 +268,6 @@ int is_valid_move(int r1,int c1,int r2,int c2)
             case -2:
                 if (horse_move(r1,c1,r2,c2))
                 {
-                    make_move(r1,c1,r2,c2);
                     return 1;
                 }
                 return 0;
@@ -283,7 +284,6 @@ int is_valid_move(int r1,int c1,int r2,int c2)
                         white_rook1_moved = 1;
                     if (r1 == 7 && c1 == 7)
                         white_rook2_moved = 1;
-                    make_move(r1,c1,r2,c2);
                     return 1;
                 }
                 return 0;
@@ -292,8 +292,7 @@ int is_valid_move(int r1,int c1,int r2,int c2)
             case -4:
                 if (elephant_move(r1,c1,r2,c2) || camel_move(r1,c1,r2,c2))
                 {
-                    make_move(r1,c1,r2,c2);
-                    return 1;
+                                        return 1;
                 }
                 return 0;
                 break;
@@ -305,15 +304,15 @@ int is_valid_move(int r1,int c1,int r2,int c2)
 void make_move(int r1,int c1,int r2,int c2)
 {
     int temp;
-    temp = board[r1][c1];
+    temp = board[r2][c2];
     board[r2][c2] = board[r1][c1];
     board[r1][c1] = 0;
     if (!is_king_safe())
     {
         board[r1][c1] = board[r2][c2];
         board[r2][c2] = temp;
-        printf("\nInvalid move, king goes to check !\n");
-        player = ~player;
+        printf("\nInvalid move, %s king in check !\n",player?"Black":"White");
+        player = -1;
     }
 }
 int white_soldier_move(int r1,int c1,int r2,int c2)
@@ -718,13 +717,12 @@ int is_king_safe()
                     {
                         if (is_valid_move(i,j,r,c))
                         {
-                            player = 1;
                             return 0;
-
                         }
                     }
                 }
             }
+        player = 1;
     }
     else
         {
@@ -742,7 +740,7 @@ int is_king_safe()
                     }
                 }
             }
+            player = 0;
         }
         return 1;
 }
-
