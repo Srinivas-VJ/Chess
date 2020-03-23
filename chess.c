@@ -3,11 +3,13 @@
 //  chess
 //
 //  Created by Srinivas V on 15/02/20.
-//  Copyright © 2020 Srinivas V. All rights reserved.
+//  Copyright � 2020 Srinivas V. All rights reserved.
 //
-#import<stdio.h>
-#import<string.h>
-#import<ctype.h>
+
+#include<stdio.h>
+#include<string.h>
+#include<ctype.h>
+
 int board[8][8] = {-1,-2,-3,-4,-5,-3,-2,-1,
                    -6,-6,-6,-6,-6,-6,-6,-6,
                     0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
@@ -16,130 +18,81 @@ int board[8][8] = {-1,-2,-3,-4,-5,-3,-2,-1,
                     0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
                     6, 6, 6, 6, 6, 6 ,6, 6,
                     1 ,2, 3, 4, 5, 3 ,2, 1};
+int tempboard[8][8] = {-1,0,0,0,-5,0,0,-1,
+                        -6,6,-6,-6,-6,-6,-6,-6,
+                        0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
+                        0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
+                        0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
+                        0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
+                        6, -6, 6, 6, 6, 6 ,6, 6,
+                        1 ,0, 0, 0, 5, 0 ,0, 1};
 
-//int board[8][8] = {-1,0,0,0,-5,-3,-2,-1,
-//                    -6,-6,-6,-6,-6,-6,-6,-6,
-//                     0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
-//                     0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
-//                     0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
-//                     0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
-//                     6, 6, 6, 6, 6, 6 ,6, 6,
-//                     1 ,2, 3, 4, 5, 0 ,0, 1};
+//int board[8][8] = {-1,0,0,0,-5,0,0,-1,
+//-6,6,-6,-6,-6,-6,-6,-6,
+// 0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
+// 0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
+// 0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
+// 0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
+// 6, -6, 6, 6, 6, 6 ,6, 6,
+// 1 ,0, 0, 0, 5, 0 ,0, 1};
 
-int player;
-int black_rook1_moved = 0;
-int black_rook2_moved = 0;
-int white_rook1_moved = 0;
-int white_rook2_moved = 0;
-int white_king_moved = 0;
-int black_king_moved = 0;
-int is_move(char *);
-int is_valid_move(int ,int ,int ,int);
-void make_move(int ,int ,int ,int);
-int white_soldier_move(int ,int ,int ,int);
-int black_soldier_move(int ,int ,int ,int);
-int horse_move(int ,int ,int ,int);
-int elephant_move(int ,int ,int ,int );
-int camel_move(int ,int ,int ,int );
-int king_move(int ,int ,int ,int );
-int is_castle(int ,int ,int ,int );
+
+int player = 1;
+int moves;
+int black_rook1_moved;
+int black_rook2_moved;
+int white_rook1_moved;
+int white_rook2_moved;
+int white_king_moved;
+int black_king_moved;
+int isValidMove(int [][8],int ,int ,int ,int);
+int makeMove(int [][8],int ,int ,int ,int);
+int white_soldier_move(int [][8],int ,int ,int ,int);
+int black_soldier_move(int [][8],int ,int ,int ,int);
+int horse_move(int [][8],int ,int ,int ,int);
+int elephant_move(int [][8],int ,int ,int ,int );
+int camel_move(int [][8],int ,int ,int ,int );
+int king_move(int [][8],int ,int ,int ,int );
+int is_castle(int [][8],int ,int ,int ,int );
+int is_king_safe(int [][8]);
+int playerHasValidMove(void);
 void castle(int ,int ,int ,int );
-void pawn_promotion(int ,int );
+int pawn_promotion(int ,int );
+void printBoard(void);
 int main()
 {
 //    printf("\x1b[44m"); //color;
+    black_rook1_moved = 0;
+    black_rook2_moved = 0;
+    white_rook1_moved = 0;
+    white_rook2_moved = 0;
+    white_king_moved = 0;
+    black_king_moved = 0;
     player = 1;
     char move[4];
-    char col_name[8] = {'a','b','c','d','e','f','g','h'};
-    printf("Welcome to CHESS !  \n\n\n");
-    while (1)
+    printf(" \n     __       __            __                                                      __                       ______   __    __  ________   ______    ______         __ ");
+    printf(" \n    /  |  _  /  |          /  |                                                    /  |                     /      \ /  |  /  |/        | /      \  /      \       /  |");
+    printf(" \n    $$ | / \ $$ |  ______  $$ |  _______   ______   _____  ____    ______         _$$ |_     ______        /$$$$$$  |$$ |  $$ |$$$$$$$$/ /$$$$$$  |/$$$$$$  |      $$ |");
+    printf(" \n    $$ |/$  \$$ | /      \ $$ | /       | /      \ /     \/    \  /      \       / $$   |   /      \       $$ |  $$/ $$ |__$$ |$$ |__    $$ \__$$/ $$ \__$$/       $$ |");
+    printf(" \n    $$ /$$$  $$ |/$$$$$$  |$$ |/$$$$$$$/ /$$$$$$  |$$$$$$ $$$$  |/$$$$$$  |      $$$$$$/   /$$$$$$  |      $$ |      $$    $$ |$$    |   $$      \ $$      \       $$ |");
+    printf(" \n    $$ $$/$$ $$ |$$    $$ |$$ |$$ |      $$ |  $$ |$$ | $$ | $$ |$$    $$ |        $$ | __ $$ |  $$ |      $$ |   __ $$$$$$$$ |$$$$$/     $$$$$$  | $$$$$$  |      $$/ ");
+    printf(" \n    $$$$/  $$$$ |$$$$$$$$/ $$ |$$ \_____ $$ \__$$ |$$ | $$ | $$ |$$$$$$$$/         $$ |/  |$$ \__$$ |      $$ \__/  |$$ |  $$ |$$ |_____ /  \__$$ |/  \__$$ |       __ ");
+    printf(" \n    $$$/    $$$ |$$       |$$ |$$       |$$    $$/ $$ | $$ | $$ |$$       |        $$  $$/ $$    $$/       $$    $$/ $$ |  $$ |$$       |$$    $$/ $$    $$/       /  |");
+    printf(" \n    $$/      $$/  $$$$$$$/ $$/  $$$$$$$/  $$$$$$/  $$/  $$/  $$/  $$$$$$$/          $$$$/   $$$$$$/         $$$$$$/  $$/   $$/ $$$$$$$$/  $$$$$$/   $$$$$$/        $$/ ");
+    printf("\n\n\nPress enter key to continue.... ");
+    getchar();
+    printf("\n\n---------------------------------------- Game begins-------------------------------------------------\n\n");
+    while (playerHasValidMove())
     {   //printf("\e[1;1H\e[2J"); //clsscr;
-        printf(" \t ");
-        for (int i=0; i<8;i++)
-            printf(" %c ",col_name[i]);
-        printf("\n\n");
-        for (int row = 0,p=8;row<8;row++,p--)
-        {
-            printf(" %d\t",p);
-            for (int col = 0;col<8;col++)
+        printBoard();
+            if (!is_king_safe(board))
             {
-                switch (board[row][col])
-                {
-                        
-                    case 0:
-                        printf(" . ");
-                        break;
-                    case -1:
-                        printf(" r ");
-                        break;
-                    case -2:
-                        printf(" h ");
-                        break;
-                    case -3:
-                        printf(" b ");
-                        break;
-                    case -4:
-                        printf(" q ");
-                        break;
-                    case -5:
-                        printf(" k ");
-                        break;
-                    case -6:
-                        printf(" s ");
-                        break;
-                    case 1:
-                        printf(" R ");
-                        break;
-                    case 2:
-                        printf(" H ");
-                        break;
-                    case 3:
-                        printf(" B ");
-                        break;
-                    case 4:
-                        printf(" Q ");
-                        break;
-                    case 5:
-                        printf(" K ");
-                        break;
-                    case 6:
-                        printf(" S ");
-                        break;
-                    default:
-                        break;
-                }
+                printf("\n%s king in check..\n",player?"White":"Black");
             }
-            printf("\n");
-        }
-        if (player)
-        {
-            printf("White's turn\nEnter your move - ");
+            printf("%s's turn\nEnter your move - ",player?"White":"Black");
             scanf("%s",move);
-            if (is_move(move))
-                player = 0;
-            else
-                printf("Invalid move !!! \n\n");
-        }
-        else
-        {
-            printf("Black's turn\nEnter your move - ");
-            scanf("%s",move);
-            if (is_move(move))
-                player = 1;
-            else
-                printf("Invalid move !!!\n\n");
-
-            
-        }
-
-    }
-}
-int is_move(char *point)
-{
-    char move[4];
-    int len,start[2],end[2];
-    for(len = 0; *point ;point++ , len++ )
-        move[len] = *point;
+        int len,start[2],end[2];
+        len = (int)strlen(move);
     if ((len == 4) && isalpha(move[0]) && isalpha(move[2]) && isdigit(move[1]) && isdigit(move[3]) )
     {
         switch(move [0])
@@ -169,12 +122,16 @@ int is_move(char *point)
                 start[1]=7;
                 break;
             default:
-                return 0;
+                printf("Invalid move !!!");
+                continue;
         }
         start[0] = ('9' - move[1]) - 1;
         end[0]= ('9' - move[3]) - 1;
         if (start[0]>8 || end[0]>8)
-            return 0;
+        {
+            printf("Invalid move !!!");
+            continue;
+        }
         switch(move [2])
         {
             case 'a':
@@ -202,95 +159,172 @@ int is_move(char *point)
                 end[1]=7;
                 break;
             default:
-                return 0;
+                printf("Invalid move !!!");
+                continue;
         }
-        printf("\n %d,%d to %d,%d \n",start[0],start[1],end[0],end[1]);
-        if (is_valid_move(start[0],start[1],end[0],end[1]))
-            return 1;
+        if (isValidMove(board,start[0],start[1],end[0],end[1]))
+        {
+            if ((board[start[0]][start[1]] == 6 && start[0] == 1) || (board[start[0]][start[1]] == -6 && start[0] == 6))
+                pawn_promotion(start[0], start[1]);
+            if(makeMove(board,start[0],start[1],end[0],end[1]))
+            {
+                switch(board[end[0]][end[1]])
+                {
+                    case 5:
+                    case -5:
+                        if (!player)
+                            white_king_moved = 1;
+                        else
+                            black_king_moved = 1;
+                        break;
+                    case 1:
+                    case -1:
+                        if (start[0] == 0 && start[1] == 0)
+                            black_rook1_moved = 1;
+                        else if (start[0] == 0 && start[1] == 7)
+                            black_rook2_moved = 1;
+                        else if (start[0] == 7 && start[1] == 0)
+                            white_rook1_moved = 1;
+                        else if (start[0] == 7 && start[1] == 7)
+                            white_rook2_moved = 1;
+                        break;
+                    default:
+                        continue;
+                    }
+                continue;
+            }
+            else
+                printf("\nInvalid move, %s king gets into check !\n",player?"White":"Black");        }
+                
+        else
+            printf("Invalid move !!!");
     }
-    return 0;
+        else
+            printf("Invalid move !!!");
+    }
+    printf("GAme OVeer %s wins",player?"White":"Black");
+    printBoard();
 }
-int is_valid_move(int r1,int c1,int r2,int c2)
+void printBoard()
 {
-    int pawn = board[r1][c1];
+    char col_name[8] = {'a','b','c','d','e','f','g','h'};
+    printf(" \t");
+    for (int i=0; i<8;i++)
+        printf(" %c ",col_name[i]);
+    printf("\n\n");
+    for (int row = 0,p=8;row<8;row++,p--)
+    {
+        printf(" %d\t",p);
+        for (int col = 0;col<8;col++)
+        {
+            switch (board[row][col])
+            {
+
+                case 0:
+                    printf(" . ");
+                    break;
+                case -1:
+                    printf(" r ");
+                    break;
+                case -2:
+                    printf(" h ");
+                    break;
+                case -3:
+                    printf(" b ");
+                    break;
+                case -4:
+                    printf(" q ");
+                    break;
+                case -5:
+                    printf(" k ");
+                    break;
+                case -6:
+                    printf(" s ");
+                    break;
+                case 1:
+                    printf(" R ");
+                    break;
+                case 2:
+                    printf(" H ");
+                    break;
+                case 3:
+                    printf(" B ");
+                    break;
+                case 4:
+                    printf(" Q ");
+                    break;
+                case 5:
+                    printf(" K ");
+                    break;
+                case 6:
+                    printf(" S ");
+                    break;
+                default:
+                    break;
+            }
+        }
+        printf("\n");
+    }
+}
+int isValidMove(int Board[][8],int r1,int c1,int r2,int c2)
+{
+    int pawn = Board[r1][c1];
     if ((player && pawn>0) || ((player == 0 )&& pawn<0))
     {
         switch (pawn)
         {
             case 6:
-                if (white_soldier_move(r1,c1,r2,c2))
+                if (white_soldier_move(Board,r1,c1,r2,c2))
                 {
-                    if (r2 == 0)
-                        pawn_promotion(r1,c1);
-                    make_move(r1,c1,r2,c2);
+
                     return 1;
                 }
                 return 0;
                 break;
             case -6:
-                if (black_soldier_move(r1,c1,r2,c2))
+                if (black_soldier_move(Board,r1,c1,r2,c2))
                 {
-                    if (r2 == 7)
-                        pawn_promotion(r1,c1);
-                    make_move(r1,c1,r2,c2);
                     return 1;
                 }
                 return 0;
                 break;
             case 5:
             case -5:
-                if (king_move(r1,c1,r2,c2))
+                if (king_move(Board,r1,c1,r2,c2))
                 {
-                    if (player)
-                        white_king_moved = 1;
-                    else
-                        black_king_moved = 1;
-                    make_move(r1,c1,r2,c2);
                     return 1;
                 }
                 return 0;
                 break;
             case 3:
             case -3:
-                if (camel_move(r1,c1,r2,c2))
+                if (camel_move(Board,r1,c1,r2,c2))
                 {
-                    make_move(r1,c1,r2,c2);
                     return 1;
                 }
                 return 0;
                 break;
             case 2:
             case -2:
-                if (horse_move(r1,c1,r2,c2))
+                if (horse_move(Board,r1,c1,r2,c2))
                 {
-                    make_move(r1,c1,r2,c2);
                     return 1;
                 }
                 return 0;
                 break;
             case 1:
             case -1:
-                if (elephant_move(r1,c1,r2,c2))
+                if (elephant_move(Board,r1,c1,r2,c2))
                 {
-                    if (r1 == 0 && c1 == 0)
-                        black_rook1_moved = 1;
-                    if (r1 == 0 && c1 == 7)
-                        black_rook2_moved = 1;
-                    if (r1 == 7 && c1 == 0)
-                        white_rook1_moved = 1;
-                    if (r1 == 7 && c1 == 7)
-                        white_rook2_moved = 1;
-                    make_move(r1,c1,r2,c2);
                     return 1;
                 }
                 return 0;
                 break;
             case 4:
             case -4:
-                if (elephant_move(r1,c1,r2,c2) || camel_move(r1,c1,r2,c2))
+                if (elephant_move(Board,r1,c1,r2,c2) || camel_move(Board,r1,c1,r2,c2))
                 {
-                    make_move(r1,c1,r2,c2);
-                    return 1;
+                                        return 1;
                 }
                 return 0;
                 break;
@@ -299,60 +333,74 @@ int is_valid_move(int r1,int c1,int r2,int c2)
     }
         return 0;
 }
-void make_move(int r1,int c1,int r2,int c2)
+int makeMove(int Board[][8],int r1,int c1,int r2,int c2)
 {
-    board[r2][c2] = board[r1][c1];
-    board[r1][c1] = 0;
+    int temp,res;
+    temp = Board[r2][c2];
+    Board[r2][c2] = Board[r1][c1];
+    Board[r1][c1] = 0;
+    if (!is_king_safe(Board))
+    {
+        Board[r1][c1] = Board[r2][c2];
+        Board[r2][c2] = temp;
+        res = 0; ;
+    }
+    else
+    {
+        res = 1;
+        player = player?0:1;
+    }
+    return res;
 }
-int white_soldier_move(int r1,int c1,int r2,int c2)
+int white_soldier_move(int Board[][8],int r1,int c1,int r2,int c2)
 {
     int res;
     if (c1 == c2 )
     {
-        if ((r1 == 6) && (board[r2][c2] == 0) && (board[r1 - 1][c2] == 0) &&  r2> 3 )
+        if ((r1 == 6) && (Board[r2][c2] == 0) && (Board[r1 - 1][c2] == 0) &&  (r2==4 || r2==5))
             res = 1;
-        else if ((r2+1) == r1 && (board[r2][c2] == 0))
+        else if ((r2+1) == r1 && (Board[r2][c2] == 0))
             res = 1;
         else
             res = 0;
     }
-    else if ((board[r2][c2]<0) && (r2 == (r1 - 1)) && (c2 == (c1 - 1) ||  c2 == (c1+1)))
+    else if ((Board[r2][c2]<0) && (r2 == (r1 - 1)) && (c2 == (c1 - 1) ||  c2 == (c1+1)))
         res = 1;
     else
         res = 0;
     return res;
-        
+
 }
-int black_soldier_move(int r1,int c1,int r2,int c2)
+int black_soldier_move(int Board[][8],int r1,int c1,int r2,int c2)
 {
     int res;
     if (c1 == c2 )
     {
-        if ((r1 == 1) && (board[r2][c2] == 0) && (board[r1 + 1][c2] == 0) &&  r2<4 )
+        if ((r1 == 1) && (board[r2][c2] == 0) && (Board[r1 + 1][c2] == 0) &&  (r2==3 || r2==2))
             res = 1;
-        else if ((r2-1) == r1 && (board[r2][c2] == 0))
+        else if ((r2-1) == r1 && (Board[r2][c2] == 0))
             res = 1;
         else
             res = 0;
     }
-    else if ((board[r2][c2]>0) && (r2 == (r1 + 1)) && (c2 == (c1 - 1) ||  c2 == (c1+1)))
+    else if ((Board[r2][c2]>0) && (r2 == (r1 + 1)) && (c2 == (c1 - 1) ||  c2 == (c1+1)))
         res = 1;
     else
         res = 0;
     return res;
-        
+
 }
-int horse_move(int r1,int c1,int r2,int c2)
+int horse_move(int Board[][8],int r1,int c1,int r2,int c2)
 {
     int res;
     if (player)
     {
-        if (board[r2][c2]>0)
+        if (Board[r2][c2]>0)
             return 0;
     }
     else
     {
-        if (board[r2][c2]<0)
+        if (Board[r2][c2]<0)
             return 0;
     }
     if (((r2 == (r1+2)) || (r2 == (r1-2))) && ((c2 == (c1+1)) || (c2 == (c1-1))))
@@ -365,17 +413,17 @@ int horse_move(int r1,int c1,int r2,int c2)
         res = 0;
     return res;
 }
-int elephant_move(int r1,int c1,int r2,int c2)
+int elephant_move(int Board[][8],int r1,int c1,int r2,int c2)
 {
     int res = 1;
     if (player)
     {
-        if (board[r2][c2]>0)
+        if (Board[r2][c2]>0)
             return 0;
     }
     else
     {
-        if (board[r2][c2]<0)
+        if (Board[r2][c2]<0)
             return 0;
     }
     if (r1 == r2)
@@ -384,7 +432,7 @@ int elephant_move(int r1,int c1,int r2,int c2)
         {
             for(int i = (c1-1);i>c2;i--)
             {
-                if (board[r2][i] == 0)
+                if (Board[r2][i] == 0)
                     continue;
                 res = 0;
                 break;
@@ -394,7 +442,7 @@ int elephant_move(int r1,int c1,int r2,int c2)
         {
             for(int i = (c1+1);i<c2;i++)
             {
-                if (board[r2][i] == 0)
+                if (Board[r2][i] == 0)
                     continue;
                 res = 0;
                 break;
@@ -409,7 +457,7 @@ int elephant_move(int r1,int c1,int r2,int c2)
         {
             for(int i = (r1-1);i>r2;i--)
             {
-                if (board[i][c2] == 0)
+                if (Board[i][c2] == 0)
                     continue;
                 res = 0;
                 break;
@@ -419,7 +467,7 @@ int elephant_move(int r1,int c1,int r2,int c2)
         {
             for(int i = (r1+1);i<r2;i++)
             {
-                if (board[i][c2] == 0)
+                if (Board[i][c2] == 0)
                     continue;
                 res = 0;
                 break;
@@ -432,17 +480,17 @@ int elephant_move(int r1,int c1,int r2,int c2)
         return 0;
     return res;
 }
-int camel_move(int r1,int c1,int r2,int c2)
+int camel_move(int Board[][8],int r1,int c1,int r2,int c2)
 {
     int res = 1;
     if (player)
     {
-        if (board[r2][c2]>0)
+        if (Board[r2][c2]>0)
             return 0;
     }
     else
     {
-        if (board[r2][c2]<0)
+        if (Board[r2][c2]<0)
             return 0;
     }
     if (r2>r1 && c2>c1)
@@ -451,7 +499,7 @@ int camel_move(int r1,int c1,int r2,int c2)
             {
                 for(int i = r1+1,j = c1+1;i<r2;i++,j++)
                 {
-                    if (board[i][j] == 0)
+                    if (Board[i][j] == 0)
                         continue;
                     res = 0;
                     break;
@@ -466,7 +514,7 @@ int camel_move(int r1,int c1,int r2,int c2)
         {
             for(int i = r1+1,j = c1-1;i<r2;i++,j--)
             {
-                if (board[i][j] == 0)
+                if (Board[i][j] == 0)
                     continue;
                 res = 0;
                 break;
@@ -481,7 +529,7 @@ int camel_move(int r1,int c1,int r2,int c2)
         {
             for(int i = r1-1,j = c1+1;j<c2;i--,j++)
             {
-                if (board[i][j] == 0)
+                if (Board[i][j] == 0)
                     continue;
                 res = 0;
                 break;
@@ -496,7 +544,7 @@ int camel_move(int r1,int c1,int r2,int c2)
         {
             for(int i = r1-1,j = c1-1;i<r2;i--,j--)
             {
-                if (board[i][j] == 0)
+                if (Board[i][j] == 0)
                     continue;
                 res = 0;
                 break;
@@ -509,24 +557,24 @@ int camel_move(int r1,int c1,int r2,int c2)
         res = 0;
     return res;
 }
-int king_move(int r1,int c1,int r2,int c2)
+int king_move(int Board[][8],int r1,int c1,int r2,int c2)
 {
     int res = 0;
     if (r2 == r1 && !(c2 == c1 + 1 || c2 == c1 - 1))
-        if (is_castle(r1,c1,r2,c2))
+        if (is_castle(Board,r1,c1,r2,c2))
         {
             castle(r1,c1,r2,c2);
             return 1;
         }
-            
+
     if (player)
     {
-        if (board[r2][c2]>0)
+        if (Board[r2][c2]>0)
             return 0;
     }
     else
     {
-        if (board[r2][c2]<0)
+        if (Board[r2][c2]<0)
             return 0;
     }
     if ((r2 == r1 + 1 || r2 == r1 -1) &&  (c2 == c1 + 1 || c2 == c1 -1))
@@ -539,30 +587,36 @@ int king_move(int r1,int c1,int r2,int c2)
         res = 0;
     return res;
 }
-int is_castle(int r1,int c1,int r2,int c2)
+int is_castle(int Board[][8],int r1,int c1,int r2,int c2)
 {
+    if (!is_king_safe(Board))
+        return 0;
     int res = 0;
     if (r1 == 0 && c1 == 4)
     {
         if (black_king_moved)
             return 0;
-        if (c2 == 6 && !black_rook2_moved)
+        if (c2 == 6 && !black_rook2_moved && (Board[0][7] == -1))
         {
-            for (int i = c1+1;i<c2;i++)
+            for (int i = c1+1;i<=6;i++)
             {
-                if (board[r1][i] == 0)
+                if (Board[r1][i] == 0)
+                {
                     res = 1;
                     continue;
+                }
                 return 0;
             }
         }
-        else if (c2 == 2 && !black_rook1_moved)
+        else if (c2 == 2 && !black_rook1_moved && (Board[0][0] == -1))
         {
-            for (int i = c1-1;i>c2;i--)
+            for (int i = c1-1;i>=1;i--)
             {
-                if (board[r1][i] == 0)
+                if (Board[r1][i] == 0)
+                {
                     res = 1;
                     continue;
+                }
                 return 0;
             }
         }
@@ -571,23 +625,27 @@ int is_castle(int r1,int c1,int r2,int c2)
     {
         if (white_king_moved)
             return 0;
-        if (c2 == 6 && !white_rook2_moved)
+        if (c2 == 6 && !white_rook2_moved && (board[7][7] == 1))
         {
-            for (int i = c1+1;i<c2;i++)
+            for (int i = c1+1;i<=6;i++)
             {
-                if (board[r1][i] == 0)
+                if (Board[r1][i] == 0)
+                {
                     res = 1;
                     continue;
+                }
                 return 0;
             }
         }
-        else if (c2 == 2 && !white_rook1_moved)
+        else if (c2 == 2 && !white_rook1_moved  && (board[7][0] == 1))
         {
-            for (int i = c1-1;i>c2;i--)
+            for (int i = c1-1;i>=1;i--)
             {
-                if (board[r1][i] == 0)
+                if (Board[r1][i] == 0)
+                {
                     res = 1;
                     continue;
+                }
                 return 0;
             }
         }
@@ -623,8 +681,9 @@ void castle(int r1,int c1,int r2,int c2)
         }
     }
 }
-void pawn_promotion(int r1, int c1)
+int pawn_promotion(int r1, int c1)
 {
+    int temp = board[r1][c1];
     char ch;
     printf("Which pawn do you want to promote?\n ");
     if (player)
@@ -677,4 +736,104 @@ void pawn_promotion(int r1, int c1)
                 break;
         }
     }
+    for (int i = 0;i<8;i++)
+        for(int j = 0;j<8;j++)
+            tempboard[i][j] = board[i][j];
+    return temp;
 }
+int is_king_safe(int Board[][8])
+{
+    int r = -1,c = -1;
+    for(int i = 0;i<8;i++)
+    {
+        for(int j = 0;j<8;j++)
+        {
+            if (((Board[i][j] == 5) && player) || ((Board[i][j] == -5) & !player) )
+            {
+                r = i;
+                c = j;
+                i = 8;
+                break;
+            }
+        }
+    }
+    if (player)
+    {
+        player = 0;
+        for(int i = 0;i<8;i++)
+            {
+                for(int j = 0;j<8;j++)
+                {
+                    if (Board[i][j]>=0)
+                        continue;
+                    else
+                    {
+                        if (isValidMove(Board,i,j,r,c))
+                        {
+                            player = 1;
+                            return 0;
+                        }
+                    }
+                }
+            }
+        player = 1;
+    }
+    else
+        {
+            player = 1;
+        for(int i = 0;i<8;i++)
+            {
+                for(int j = 0;j<8;j++)
+                {
+                    if (Board[i][j]<=0)
+                        continue;
+                    else
+                    {
+                        if (isValidMove(Board,i,j,r,c))
+                        {
+                            player = 0;
+                            return 0;
+                        }
+                    }
+                }
+            }
+            player = 0;
+        }
+        return 1;
+}
+int playerHasValidMove()
+{
+    int i,j;
+    for (i = 0;i<8;i++)
+        for(j = 0;j<8;j++)
+            tempboard[i][j] = board[i][j];
+    
+    
+    int r = -1,c = -1;
+    for (r = 0;r<8;r++)
+    {
+        for(c = 0;c<8;c++)
+        {
+            if ((board[r][c] == 0) || (player && board[r][c]<0) || (!player && board[r][c]>0))
+                continue;
+            for (i = 0;i<8;i++)
+                for(j = 0;j<8;j++)
+                   if(isValidMove(board,r, c, i, j))
+                    {
+                       tempboard[i][j] = tempboard[r][c];
+                        tempboard[r][c] = 0;
+                        if(is_king_safe(tempboard))
+                        {
+                            tempboard[i][j] = board[i][j];
+                            tempboard[r][c] = board[r][c];
+                            return 1;
+                        }
+                        tempboard[i][j] = board[i][j];
+                        tempboard[r][c] = board[r][c];
+                    }
+        }
+    }
+    player = player?0:1;
+    return 0;
+}
+
