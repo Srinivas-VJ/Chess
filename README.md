@@ -1,7 +1,8 @@
 # Chess
-A two player chess game.\n
-NO graphical interface because its hard.\n
-Only using terminal\n
-69.
-# findbugsgetbucks
+==================
+A two player chess game.
+Can be played from the terminal.
+'''dgff
 
+# findbugsgetbucks
+===================
