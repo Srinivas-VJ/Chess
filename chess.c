@@ -298,63 +298,69 @@ void printDraw(){
 void printBoard()
 {
     char col_name[8] = {'a','b','c','d','e','f','g','h'};
-     printf(" \t");
-        for (int i=0; i<8;i++)
-            printf(" %c ",col_name[i]);
-        printf("\n\n");
-        for (int row = 0,p=8;row<8;row++,p--)
+    printf(" \t");
+    for (int i=0; i<8;i++)
+        printf(" %c ",col_name[i]);
+    printf("\n");
+    for (int row = 0,p=8;row<8;row++,p--)
+    {
+        printf(" %d\t",p);
+        printf("\x1b[0m\x1b[30m");
+        for (int col = 0;col<8;col++)
         {
-            printf(" %d\t",p);
-            for (int col = 0;col<8;col++)
-            {
-                switch (board[row][col])
-                {
-
-                    case 0:
-                        printf(" . ");
-                        break;
-                    case -1:
-                        printf(" r ");
-                        break;
-                    case -2:
-                        printf(" h ");
-                        break;
-                    case -3:
-                        printf(" b ");
-                        break;
-                    case -4:
-                        printf(" q ");
-                        break;
-                    case -5:
-                        printf(" k ");
-                        break;
-                    case -6:
-                        printf(" s ");
-                        break;
-                    case 1:
-                        printf(" R ");
-                        break;
-                    case 2:
-                        printf(" H ");
-                        break;
-                    case 3:
-                        printf(" B ");
-                        break;
-                    case 4:
-                        printf(" Q ");
-                        break;
-                    case 5:
-                        printf(" K ");
-                        break;
-                    case 6:
-                        printf(" S ");
-                        break;
-                    default:
-                        break;
-                }
+            if(row%2==0){
+                col%2==0? printf("\x1b[47m"):printf("\x1b[100m");
+            }else {
+                col%2==0? printf("\x1b[100m"):printf("\x1b[47m");
             }
-            printf("\n");
+            switch (board[row][col])
+            {
+                case 0:
+                    printf("   ");
+                    break;
+                case -1:
+                    printf(" ♜ ");
+                    break;
+                case -2:
+                    printf(" ♞ ");
+                    break;
+                case -3:
+                    printf(" ♝ ");
+                    break;
+                case -4:
+                    printf(" ♛ ");
+                    break;
+                case -5:
+                    printf(" ♚ ");
+                    break;
+                case -6:
+                    printf(" ♟ ");
+                    break;
+                case 1:
+                    printf(" ♖ ");
+                    break;
+                case 2:
+                    printf(" ♘ ");
+                    break;
+                case 3:
+                    printf(" ♗ ");
+                    break;
+                case 4:
+                    printf(" ♕ ");
+                    break;
+                case 5:
+                    printf(" ♔ ");
+                    break;
+                case 6:
+                    printf(" ♙ ");
+                    break;
+                default:
+                    break;
+            }
         }
+        printf("\x1b[0m\n");
+    }
+}
 }
 int isValidMove(int Board[][8],int r1,int c1,int r2,int c2)
 {
