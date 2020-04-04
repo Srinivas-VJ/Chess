@@ -361,7 +361,6 @@ void printBoard()
         printf("\x1b[0m\n");
     }
 }
-}
 int isValidMove(int Board[][8],int r1,int c1,int r2,int c2)
 {
     int pawn = Board[r1][c1];
@@ -879,4 +878,5 @@ int playerHasValidMove()
     player = player?0:1;
     return 0;
 }
+
 
