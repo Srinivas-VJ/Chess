@@ -479,7 +479,7 @@ int elephantMove(int Board[][8],int r1,int c1,int r2,int c2)
 {
     int res = 1;
     if (player && Board[r2][c2]>0) return 0;
-    else if (Board[r2][c2]<0) return 0;
+    else if (!player && Board[r2][c2]<0) return 0;
     if (r1 == r2)
     {
         if (c1>c2)
