@@ -4,7 +4,6 @@
  *  Copyright © 2020 Srinivas V. All rights reserved.
  */
 #include<stdio.h>
-#include <term.h>
 #include<string.h>
 #include<ctype.h>
 #include <stdlib.h>
