@@ -8,21 +8,21 @@
 #include<ctype.h>
 #include <stdlib.h>
 int board[8][8] = {-1,-2,-3,-4,-5,-3,-2,-1,
-    -6,-6,-6,-6,-6,-6,-6,-6,
-    0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
-    0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
-    0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
-    0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
-    6, 6, 6, 6, 6, 6 ,6, 6,
-    1 ,2, 3, 4, 5, 3 ,2, 1};
+                    -6,-6,-6,-6,-6,-6,-6,-6,
+                    0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
+                    0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
+                    0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
+                    0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
+                    6, 6, 6, 6, 6, 6 ,6, 6,
+                    1 ,2, 3, 4, 5, 3 ,2, 1};
 int tempboard[8][8] = {-1,-2,-3,-4,-5,-3,-2,-1,
-    -6,-6,-6,-6,-6,-6,-6,-6,
-    0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
-    0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
-    0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
-    0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
-    6, 6, 6, 6, 6, 6 ,6, 6,
-    1 ,2, 3, 4, 5, 3 ,2, 1};
+                    -6,-6,-6,-6,-6,-6,-6,-6,
+                    0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
+                    0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
+                    0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
+                    0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
+                    6, 6, 6, 6, 6, 6 ,6, 6,
+                    1 ,2, 3, 4, 5, 3 ,2, 1};
 int player = 1;
 int inactive_moves;
 int checkmate = 0;
@@ -59,6 +59,10 @@ void printCheck(void);
 int main()
 {
     printf("\e[1;1H\e[2J\n\n");//clrscr
+    FILE *file;
+    file = fopen("Moves.txt","w");
+    fprintf(file,"\n-----------------PREVIOUS GAME'S MOVES---------------------\n");
+    fclose(file);
     black_rook1_moved = 0;
     black_rook2_moved = 0;
     white_rook1_moved = 0;
@@ -168,6 +172,15 @@ int main()
                     pawn_promotion(start[0], start[1]);
                 if(makeMove(board,start[0],start[1],end[0],end[1]))
                 {
+                    file = fopen("Moves.txt","a");
+                    if (file == NULL){
+                        printf("ERORR!\n");
+                    }
+                    else
+                    {
+                        fprintf(file,"%s's move - %.4s\n",!player?"White":"Black",move);
+                        fclose(file);
+                    }
                     switch(board[end[0]][end[1]])
                     {
                         case 5:
@@ -204,19 +217,27 @@ int main()
             printInvalidMove();
     }
     printBoard();
+    file = fopen("Moves.txt","a");
     if (checkmate)
+    {
         printCheckmate();
+        fprintf(file,"%s won by checkmate\n",player?"White":"Black");
+    }
     else if (stalemate)
     {
         printStalemate();
         printDraw();
+        fprintf(file,"Match drawn by stalemate\n");
+
     }
     else if (inactive_moves>50)
     {
         print50();
         printDraw();
+        fprintf(file,"Match drawn by 50 move rule\n");
     }
     printThanks();
+    fclose(file);
 
 }
 void printCheck(void)
@@ -466,7 +487,7 @@ int horseMove(int Board[][8],int r1,int c1,int r2,int c2)
 {
     int res;
     if (player && Board[r2][c2]>0) return 0;
-    else if (Board[r2][c2]<0) return 0;
+    else if (!player && Board[r2][c2]<0) return 0;
     if (((r2 == (r1+2)) || (r2 == (r1-2))) && ((c2 == (c1+1)) || (c2 == (c1-1))))
         res = 1;
     else if (((c2 == (c1+2)) || (c2 == (c1-2))) && ((r2 == (r1+1)) || (r2 == (r1-1))))
@@ -878,5 +899,3 @@ int playerHasValidMove()
     player = player?0:1;
     return 0;
 }
-
-
