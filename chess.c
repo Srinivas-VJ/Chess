@@ -104,6 +104,7 @@ int main()
     printf("\nPress enter key to continue.... ");
     fflush(stdin);
     getchar();
+    printf("\n");
     while (playerHasValidMove())
     {
         if (number_of_pawns_temp == number_of_pawns)
