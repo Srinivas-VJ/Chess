@@ -8,21 +8,21 @@
 #include<ctype.h>
 #include <stdlib.h>
 int board[8][8] = {-1,-2,-3,-4,-5,-3,-2,-1,
-                    -6,-6,-6,-6,-6,-6,-6,-6,
-                    0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
-                    0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
-                    0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
-                    0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
-                    6, 6, 6, 6, 6, 6 ,6, 6,
-                    1 ,2, 3, 4, 5, 3 ,2, 1};
+    -6,-6,-6,-6,-6,-6,-6,-6,
+    0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
+    0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
+    0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
+    0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
+    6, 6, 6, 6, 6, 6 ,6, 6,
+    1 ,2, 3, 4, 5, 3 ,2, 1};
 int tempboard[8][8] = {-1,-2,-3,-4,-5,-3,-2,-1,
-                    -6,-6,-6,-6,-6,-6,-6,-6,
-                    0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
-                    0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
-                    0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
-                    0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
-                    6, 6, 6, 6, 6, 6 ,6, 6,
-                    1 ,2, 3, 4, 5, 3 ,2, 1};
+    -6,-6,-6,-6,-6,-6,-6,-6,
+    0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
+    0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
+    0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
+    0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
+    6, 6, 6, 6, 6, 6 ,6, 6,
+    1 ,2, 3, 4, 5, 3 ,2, 1};
 int player = 1;
 int inactive_moves;
 int checkmate = 0;
@@ -84,21 +84,21 @@ int main()
     scanf("%c",&C);
     if (C == 'y' || C == 'Y')
     {
-        FILE *fptr; 
-        fptr = fopen("instructions.txt", "r"); 
-        if (fptr == NULL) 
-        { 
-            printf("Cannot open file \n");  
-        } 
+        FILE *fptr;
+        fptr = fopen("instructions.txt", "r");
+        if (fptr == NULL)
+        {
+            printf("Cannot open file \n");
+        }
         else
         {
-        c = fgetc(fptr); 
-            while (c != EOF) 
-            { 
-                printf ("%c", c); 
-                c = fgetc(fptr); 
-            } 
-        fclose(fptr); 
+            c = fgetc(fptr);
+            while (c != EOF)
+            {
+                printf ("%c", c);
+                c = fgetc(fptr);
+            }
+            fclose(fptr);
         }
     }
     printf("\nPress enter key to continue.... ");
@@ -124,7 +124,6 @@ int main()
         if (len == 1 && (move[0] == 'r' || move[0] == 'R'))
         {
             resigned = 1;
-
             break;
         }
         if ((len == 4) && isalpha(move[0]) && isalpha(move[2]) && isdigit(move[1]) && isdigit(move[3]) )
@@ -239,7 +238,7 @@ int main()
                 else
                     printInvalidMove();
                 printf("\n %s king gets into check !\n",player?"White":"Black");        }
-
+            
             else
                 printInvalidMove();
         }
@@ -259,7 +258,7 @@ int main()
         printStalemate();
         printDraw();
         fprintf(file,"Match drawn by stalemate\n");
-
+        
     }
     else if (inactive_moves>50)
     {
@@ -273,12 +272,12 @@ int main()
         fprintf(file,"%s won\n",!player?"White":"Black");
         player = player?0:1;
         printVictory();
-
+        
     }
     
     printThanks();
     fclose(file);
-
+    
 }
 void printCheck(void)
 {
@@ -322,16 +321,16 @@ void printVictory()
         printf("╚═╝┴─┘┴ ┴└─┘┴ ┴  └┴┘┴┘└┘└─┘o\n");
     }
     printf("\x1b[0m");
-
+    
 }
 void printCheckmate()
 {
-        printf("\x1b[32m");
-        printf("╔═╗┬ ┬┌─┐┌─┐┬┌─┌┬┐┌─┐┌┬┐┌─┐  ┬  \n");
-        printf("║  ├─┤├┤ │  ├┴┐│││├─┤ │ ├┤   │  \n");
-        printf("╚═╝┴ ┴└─┘└─┘┴ ┴┴ ┴┴ ┴ ┴ └─┘  o  o\n");
-        printf("\x1b[0m");
-
+    printf("\x1b[32m");
+    printf("╔═╗┬ ┬┌─┐┌─┐┬┌─┌┬┐┌─┐┌┬┐┌─┐  ┬  \n");
+    printf("║  ├─┤├┤ │  ├┴┐│││├─┤ │ ├┤   │  \n");
+    printf("╚═╝┴ ┴└─┘└─┘┴ ┴┴ ┴┴ ┴ ┴ └─┘  o  o\n");
+    printf("\x1b[0m");
+    
 }
 void printStalemate(){
     printf("\x1b[36m");
@@ -339,7 +338,7 @@ void printStalemate(){
     printf("└─┐ │ ├─┤│  ├┤ │││├─┤ │ ├┤   │\n");
     printf("└─┘ ┴ ┴ ┴┴─┘└─┘┴ ┴┴ ┴ ┴ └─┘  o\n");
     printf("\x1b[0m");
-
+    
 }
 void printThanks(){
     printf("\x1b[32m");
@@ -347,7 +346,7 @@ void printThanks(){
     printf(" ║ ├─┤├─┤│││├┴┐└─┐  ├┤ │ │├┬┘  ├─┘│  ├─┤└┬┘│││││ ┬  │\n");
     printf(" ╩ ┴ ┴┴ ┴┘└┘┴ ┴└─┘  └  └─┘┴└─  ┴  ┴─┘┴ ┴ ┴ ┴┘└┘└─┘  o\n");
     printf("\x1b[0m");
-
+    
 }
 void print50(){
     printf("\x1b[36m");
@@ -355,7 +354,7 @@ void print50(){
     printf("╠╣ │├┤  │ └┬┘  ││││├─┤│   │ │└┐┌┘├┤   ││││ │└┐┌┘├┤ └─┐  │\n");
     printf("╚  ┴└   ┴  ┴   ┴┘└┘┴ ┴└─┘ ┴ ┴ └┘ └─┘  ┴ ┴└─┘ └┘ └─┘└─┘  o\n");
     printf("\x1b[0m");
-
+    
 }
 void printDraw(){
     printf("\x1b[36m");
@@ -363,18 +362,18 @@ void printDraw(){
     printf("║║║├─┤ │ │  ├─┤   ││├┬┘├─┤││││││  │\n");
     printf("╩ ╩┴ ┴ ┴ └─┘┴ ┴  ─┴┘┴└─┴ ┴└┴┘┘└┘  o\n");
     printf("\x1b[0m");
-
+    
 }
 void printBoard()
 {
     char col_name[8] = {'a','b','c','d','e','f','g','h'};
-    printf("\x1b[30m\x1b[46m   ");    
+    printf("\x1b[30m\x1b[46m   ");
     for (int i=0; i<8;i++)
         printf(" %c ",col_name[i]);
     printf("   \n");
     for (int row = 0,p=8;row<8;row++,p--)
     {
-        printf("\x1b[30m\x1b[46m");    
+        printf("\x1b[30m\x1b[46m");
         printf(" %d ",p);
         printf("\x1b[0m\x1b[30m");
         for (int col = 0;col<8;col++)
@@ -433,7 +432,7 @@ void printBoard()
         printf(" %d ",p);
         printf("\x1b[0m\n");
     }
-    printf("\x1b[30m\x1b[46m   ");    
+    printf("\x1b[30m\x1b[46m   ");
     for (int i=0; i<8;i++)
         printf(" %c ",col_name[i]);
     printf("   \x1b[0m\n");
@@ -589,8 +588,8 @@ int elephantMove(int Board[][8],int r1,int c1,int r2,int c2)
                 if (Board[i][c2] == 0)
                     continue;
                 else{
-                res = 0;
-                break;
+                    res = 0;
+                    break;
                 }
             }
         }
@@ -955,3 +954,4 @@ int playerHasValidMove()
     player = player?0:1;
     return 0;
 }
+
