@@ -461,7 +461,7 @@ int horseMove(int Board[][8],int r1,int c1,int r2,int c2)
 {
     int res;
     if (player && Board[r2][c2]>0) return 0;
-    else if (Board[r2][c2]<0) return 0;
+    else if (!player && Board[r2][c2]<0) return 0;
     if (((r2 == (r1+2)) || (r2 == (r1-2))) && ((c2 == (c1+1)) || (c2 == (c1-1))))
         res = 1;
     else if (((c2 == (c1+2)) || (c2 == (c1-2))) && ((r2 == (r1+1)) || (r2 == (r1-1))))
