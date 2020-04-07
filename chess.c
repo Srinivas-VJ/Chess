@@ -629,7 +629,7 @@ int camelMove(int Board[][8],int r1,int c1,int r2,int c2)
     {
         if ((r2 - r1) == (c1 - c2))
         {
-            for(int i = r1-1,j = c1-1;i>r2;i--,j--)
+            for(int i = r1+1,j = c1-1;i<r2;i++,j--)
             {
                 if (Board[i][j] == 0)
                     continue;
