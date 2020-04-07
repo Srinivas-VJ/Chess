@@ -1,8 +1,3 @@
-/*
- *  CHESS
- *  Created by Srinivas V on 15/02/20.
- *  Copyright © 2020 Srinivas V. All rights reserved.
- */
 #include<stdio.h>
 #include<string.h>
 #include<ctype.h>
@@ -371,7 +366,7 @@ void printBoard()
     printf("\x1b[30m\x1b[46m   ");
     for (int i=0; i<8;i++)
         printf(" %c ",col_name[i]);
-    printf("   \n");
+    printf("   \x1b[0m\n");
     for (int row = 0,p=8;row<8;row++,p--)
     {
         printf("\x1b[30m\x1b[46m");
