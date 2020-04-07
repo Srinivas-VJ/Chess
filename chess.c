@@ -1,23 +1,23 @@
 #include<stdio.h>
 #include<string.h>
 #include<ctype.h>
-#include <stdlib.h>
+#include<stdlib.h>
 int board[8][8] = {-1,-2,-3,-4,-5,-3,-2,-1,
-    -6,-6,-6,-6,-6,-6,-6,-6,
-    0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
-    0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
-    0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
-    0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
-    6, 6, 6, 6, 6, 6 ,6, 6,
-    1 ,2, 3, 4, 5, 3 ,2, 1};
+                -6,-6,-6,-6,-6,-6,-6,-6,
+                0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
+                0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
+                0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
+                0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
+                6, 6, 6, 6, 6, 6 ,6, 6,
+                1 ,2, 3, 4, 5, 3 ,2, 1};
 int tempboard[8][8] = {-1,-2,-3,-4,-5,-3,-2,-1,
-    -6,-6,-6,-6,-6,-6,-6,-6,
-    0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
-    0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
-    0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
-    0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
-    6, 6, 6, 6, 6, 6 ,6, 6,
-    1 ,2, 3, 4, 5, 3 ,2, 1};
+                -6,-6,-6,-6,-6,-6,-6,-6,
+                0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
+                0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
+                0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
+                0 ,0 ,0 ,0 ,0 ,0 ,0 ,0,
+                6, 6, 6, 6, 6, 6 ,6, 6,
+                1 ,2, 3, 4, 5, 3 ,2, 1};
 int player = 1;
 int inactive_moves;
 int checkmate = 0;
@@ -270,7 +270,6 @@ int main()
         printVictory();
         
     }
-    
     printThanks();
     fclose(file);
     
@@ -363,7 +362,7 @@ void printDraw(){
 void printBoard()
 {
     char col_name[8] = {'a','b','c','d','e','f','g','h'};
-    printf("\x1b[30m\x1b[46m   ");
+    printf("\x1b[30m\x1b[46m   ");//
     for (int i=0; i<8;i++)
         printf(" %c ",col_name[i]);
     printf("   \x1b[0m\n");
@@ -475,13 +474,13 @@ int isValidMove(int Board[][8],int r1,int c1,int r2,int c2)
                 return 0;
                 break;
         }
-        return 1;
+        //return 1;
     }
     return 0;
 }
 int makeMove(int Board[][8],int r1,int c1,int r2,int c2)
 {
-    int temp,res;
+    int temp;
     temp = Board[r2][c2];
     Board[r2][c2] = Board[r1][c1];
     Board[r1][c1] = 0;
@@ -489,14 +488,12 @@ int makeMove(int Board[][8],int r1,int c1,int r2,int c2)
     {
         Board[r1][c1] = Board[r2][c2];
         Board[r2][c2] = temp;
-        res = 0; ;
+        return 0;
     }
-    else
-    {
-        res = 1;
+    else{
         player = player?0:1;
+        return 1;
     }
-    return res;
 }
 int whiteSoldierMove(int Board[][8],int r1,int c1,int r2,int c2)
 {
@@ -581,12 +578,9 @@ int elephantMove(int Board[][8],int r1,int c1,int r2,int c2)
         {
             for(int i = (r1-1);i>r2;i--)
             {
-                if (Board[i][c2] == 0)
-                    continue;
-                else{
-                    res = 0;
-                    break;
-                }
+                if (Board[i][c2] == 0) continue;
+                res = 0;
+                break;
             }
         }
         else if (r2>r1)
@@ -618,7 +612,7 @@ int camelMove(int Board[][8],int r1,int c1,int r2,int c2)
             return 0;
     if (r2>r1 && c2>c1)
     {
-        if ((r2 - r1) == (c2 -c1))
+        if ((r2 - r1) == (c2 - c1))
         {
             for(int i = r1+1,j = c1+1;i<r2;i++,j++)
             {
@@ -635,7 +629,7 @@ int camelMove(int Board[][8],int r1,int c1,int r2,int c2)
     {
         if ((r2 - r1) == (c1 - c2))
         {
-            for(int i = r1+1,j = c1-1;i<r2;i++,j--)
+            for(int i = r1-1,j = c1-1;i>r2;i--,j--)
             {
                 if (Board[i][j] == 0)
                     continue;
@@ -665,7 +659,7 @@ int camelMove(int Board[][8],int r1,int c1,int r2,int c2)
     {
         if ((r1 - r2) == (c1 - c2))
         {
-            for(int i = r1-1,j = c1-1;i<r2;i--,j--)
+            for(int i = r1-1,j = c1-1;i>r2;i--,j--)
             {
                 if (Board[i][j] == 0)
                     continue;
@@ -950,4 +944,3 @@ int playerHasValidMove()
     player = player?0:1;
     return 0;
 }
-
