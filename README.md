@@ -11,7 +11,9 @@ The player controlling the white pieces is named "White", the player controlling
 * There is no timer or any kind of time constrain.
 * Here's what the game looks like,
 
-![demo](https://github.com/Srinivas-VJ/Chess/blob/master/Screenshot%202020-03-25%20at%202.28.17%20PM.png)
+![demo](https://github.com/Srinivas-VJ/Chess/blob/master/Screenshot%202021-02-16%20at%201.26.33%20PM.png)
+
+![Game](https://github.com/Srinivas-VJ/Chess/blob/master/Screenshot%202021-02-16%20at%201.27.21%20PM.png)
 
 ### How to play
 * Each position on the board is representated by a row number from 1 to 8 and a column alphabhet from 'a' to 'h'.
